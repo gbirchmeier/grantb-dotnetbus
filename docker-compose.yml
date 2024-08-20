@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  kafka:
+    container_name: dotnetbus-kafka
+    image: apache/kafka:3.8.0
+    ports:
+      - 9092:9092
+    command: >
+      sh -c "sh /opt/kafka/bin/kafka-topics.sh --create --topic demo-topic --bootstrap-server localhost:9092"
+
