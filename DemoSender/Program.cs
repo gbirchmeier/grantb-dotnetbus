@@ -1,39 +1,38 @@
 ﻿using System;
 using Confluent.Kafka;
 
-namespace DemoSender
-{
-    public static class Program
-    {
-        private static void Main(string[] args) {
-            if (args.Length < 1)
-                throw new InvalidOperationException("Need a param, which is the msg to send");
+namespace DemoSender;
 
-            const string topic = "demo-topic";
+public static class Program {
+    private static void Main(string[] args) {
+        if (args.Length < 1)
+            throw new InvalidOperationException("Need a param, which is the msg to send");
 
-            var config = new ProducerConfig
-            {
-                // User-specific properties that you must set
-                BootstrapServers = "localhost:9092",
+        const string topic = "demo-topic";
 
-                // Fixed properties
-                Acks = Acks.All
-            };
+        var config = new ProducerConfig
+        {
+            // User-specific properties that you must set
+            BootstrapServers = "localhost:9092",
 
-            var msg = new Message<string, string> { Key = "defaultKey", Value = args.First() };
+            // Fixed properties
+            Acks = Acks.All
+        };
 
-            using (var producer = new ProducerBuilder<string, string>(config).Build()) {
-                producer.Produce(topic, msg,
-                    (deliveryReport) =>
-                    {
-                        if (deliveryReport.Error.Code != ErrorCode.NoError) {
-                            Console.WriteLine($"Failed to deliver message: {deliveryReport.Error.Reason}");
-                        } else {
-                            Console.WriteLine($"Produced event to topic {topic}: '{msg.Value}'");
-                        }
-                    });
-                producer.Flush(TimeSpan.FromSeconds(10));
-            }
+        var msg = new Message<string, string> { Key = "defaultKey", Value = args.First() };
+
+        using (var producer = new ProducerBuilder<string, string>(config).Build()) {
+            producer.Produce(topic, msg,
+                (deliveryReport) =>
+                {
+                    if (deliveryReport.Error.Code != ErrorCode.NoError) {
+                        Console.WriteLine($"Failed to deliver message: {deliveryReport.Error.Reason}");
+                    } else {
+                        Console.WriteLine($"Produced event to topic {topic}: '{msg.Value}'");
+                    }
+                });
+            producer.Flush(TimeSpan.FromSeconds(10));
         }
     }
 }
+

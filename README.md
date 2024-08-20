@@ -23,3 +23,8 @@ docker exec -it <image> bash
 
 on image:
 ./opt/kafka/bin/
+
+
+
+kafka docs:
+https://docs.confluent.io/platform/current/clients/confluent-kafka-dotnet/_site/api/Confluent.Kafka.html
