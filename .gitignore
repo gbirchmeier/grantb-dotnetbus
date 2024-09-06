@@ -391,3 +391,5 @@ scratchzip/
 # Equity.API publish destination
 iisPublish/
 
+# Mac thing
+.DS_Store

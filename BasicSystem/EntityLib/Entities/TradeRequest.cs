@@ -4,17 +4,22 @@ namespace EntityLib.Entities;
 
 [ProtoContract]
 public class TradeRequest {
+
+    public TradeRequest() { } // deserialization needs a no-param ctor
+
     public TradeRequest(
         string traderId,
         string sourceId,
-        OrderTypeEnum orderTypeEnum,
-        string symbol
+        OrderTypeEnum orderType,
+        string symbol,
+        SideEnum side
     ) {
         CreationTime = DateTime.Now;
         TraderId = traderId;
         SourceId = sourceId;
-        OrderTypeEnum = orderTypeEnum;
+        OrderType = orderType;
         Symbol = symbol;
+        Side = side;
     }
 
     [ProtoMember(1)]
@@ -27,11 +32,14 @@ public class TradeRequest {
     public string SourceId { get; }
 
     [ProtoMember(4)]
-    public OrderTypeEnum OrderTypeEnum { get; }
+    public OrderTypeEnum OrderType { get; }
 
     [ProtoMember(5)]
     public string Symbol { get; }
 
     [ProtoMember(6)]
     public decimal? Price { get; set; } = null;
+
+    [ProtoMember(7)]
+    public SideEnum Side { get; }
 }

@@ -4,6 +4,9 @@ namespace EntityLib.Entities;
 
 [ProtoContract]
 public class TradeStatusUpdate {
+
+    public TradeStatusUpdate() { } // deserialization needs a no-param ctor
+
     public TradeStatusUpdate(
         string tradeSourceId,
         TradeStatusEnum tradeStatusEnum

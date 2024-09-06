@@ -14,3 +14,10 @@ public enum TradeStatusEnum {
     Filled = 1,
     Rejected = 2
 }
+
+[ProtoContract]
+public enum SideEnum {
+    Unset = 0,
+    Buy = 1,
+    Sell = 2
+}
