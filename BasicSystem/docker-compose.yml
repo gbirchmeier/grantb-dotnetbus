@@ -4,7 +4,31 @@ services:
     image: apache/kafka:3.8.0
     ports:
       - 9092:9092
-#    command: >
-#      sh -c "sleep 20 && sh /opt/kafka/bin/kafka-topics.sh --create --topic trade-request --bootstrap-server localhost:9092 &&
-#             sh /opt/kafka/bin/kafka-topics.sh --create --topic trade-status  --bootstrap-server localhost:9092"
+
+  init-kafka:
+    container_name: dotnetbus-init-kafka
+    image: apache/kafka:3.8.0
+    depends_on:
+      - kafka
+    command: |
+      "
+      # blocks until kafka is reachable
+      sh /opt/kafka/bin/kafka-topics.sh --bootstrap-server dotnetbus-kafka:9092 --list
+
+      echo -e 'Creating kafka topics'
+      sh /opt/kafka/bin/kafka-topics.sh --bootstrap-server dotnetbus-kafka:9092 --create --if-not-exists --topic trade-request --replication-factor 1 --partitions 1
+      sh /opt/kafka/bin/kafka-topics.sh --bootstrap-server dotnetbus-kafka:9092 --create --if-not-exists --topic trade-status --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      sh /opt/kafka/bin/kafka-topics.sh --bootstrap-server dotnetbus-kafka:9092 --list
+      "
+
+  mssql:
+    container_name: dotnetbus-mssql
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password123#
 
