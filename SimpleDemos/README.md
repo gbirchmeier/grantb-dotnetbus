@@ -9,7 +9,7 @@ Starts up a new docker container with topic `demo-topic` created.
 ## projects
 
 * DemoSender - sends a plaintext message to the bus (in topic `demo-topic`)
-* DemoConsumer - comsumes plaintext messages from the bus (topic `demo-topic`)
+* DemoConsumer - consumes plaintext messages from the bus (topic `demo-topic`)
 
 ### misc notes
 
