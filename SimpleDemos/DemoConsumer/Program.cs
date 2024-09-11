@@ -28,6 +28,7 @@ public static class Program {
         using (var consumer = new ConsumerBuilder<string, string>(config).Build())
         {
             consumer.Subscribe(topic);
+            Console.WriteLine("Waiting to consume...");
             try {
                 while (true) {
                     var cr = consumer.Consume(cts.Token);

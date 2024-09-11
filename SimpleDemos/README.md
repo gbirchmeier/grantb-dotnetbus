@@ -4,7 +4,7 @@
 
 `docker compose -f docker-compose.yml up --build`
 
-Starts up a new docker container with topic `demo-topic` created.
+Starts up a new docker container, but no topics created.  See below.
 
 ## projects
 

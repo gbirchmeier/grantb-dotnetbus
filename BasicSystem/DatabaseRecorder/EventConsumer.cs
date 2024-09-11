@@ -1,5 +1,7 @@
 using Confluent.Kafka;
+using Dapper;
 using EntityLib.Entities;
+using Microsoft.Data.SqlClient;
 using ProtoBuf;
 
 namespace DatabaseRecorder;
@@ -7,6 +9,9 @@ namespace DatabaseRecorder;
 public class EventConsumer {
     private static readonly string[] _topics = ["trade-request", "trade-status"];
     private readonly ConsumerConfig _config;
+
+    public static readonly string CxnString =
+        "Server=127.0.0.1;Database=DotNetBus;User=sa;Password=Password123#;Encrypt=False";
 
     public EventConsumer() {
         _config = new ConsumerConfig
@@ -43,10 +48,16 @@ public class EventConsumer {
                             case "trade-request":
                                 var tradeRequest = Serializer.Deserialize<TradeRequest>(stream);
                                 Console.WriteLine($"* Received TradeRequest: {tradeRequest.SourceId} {tradeRequest.Symbol} {tradeRequest.Side} {tradeRequest.Price}");
+                                using (var cxn = new SqlConnection(CxnString)) {
+                                    cxn.Execute(TradeRequest.InsertTemplate, tradeRequest);
+                                }
                                 break;
                             case "trade-status":
                                 var tradeStatusUpdate = Serializer.Deserialize<TradeStatusUpdate>(stream);
-                                Console.WriteLine($"* Received TradeStatusUpdate: {tradeStatusUpdate.TradeSourceId} {tradeStatusUpdate.TradeStatusEnum}");
+                                Console.WriteLine($"* Received TradeStatusUpdate: {tradeStatusUpdate.TradeSourceId} {tradeStatusUpdate.TradeStatus}");
+                                using (var cxn = new SqlConnection(CxnString)) {
+                                    cxn.Execute(TradeStatusUpdate.InsertTemplate, tradeStatusUpdate);
+                                }
                                 break;
                             default:
                                 throw new ApplicationException($"Unsupported topic: {cr.Topic}");

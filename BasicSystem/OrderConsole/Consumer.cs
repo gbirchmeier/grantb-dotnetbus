@@ -39,7 +39,7 @@ public class Consumer {
                     byte[] data = Convert.FromBase64String(cr.Message.Value);
                     using (MemoryStream stream = new MemoryStream(data)) {
                         var statusUpdate = Serializer.Deserialize<TradeStatusUpdate>(stream);
-                        Console.WriteLine($"<<< Received TradeStatusUpdate (key={key}): {statusUpdate.TradeSourceId} {statusUpdate.TradeStatusEnum}");
+                        Console.WriteLine($"<<< Received TradeStatusUpdate (key={key}): {statusUpdate.TradeSourceId} {statusUpdate.TradeStatus}");
                         Console.Write("> ");
                     }
                 }
